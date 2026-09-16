@@ -21,7 +21,7 @@ export const IDENTITY = {
 
 export const SOCIALS = {
   github: "https://github.com/maherbenaicha",
-  linkedin: "https://www.linkedin.com/in/maher-ben-aicha",
+  linkedin: "https://www.linkedin.com/in/maher-ben-aicha-86808a368/",
   email: "maher.benaicha@etudiant-enit.utm.tn",
   phone: "+216 94 916 106",
   phoneHref: "tel:+21694916106",
@@ -37,12 +37,11 @@ export const PORTRAIT = {
 } as const;
 
 export const NAV_LINKS = [
-  { href: "#home", label: "Home" },
-  { href: "#about", label: "About" },
   { href: "#skills", label: "Stack" },
-  { href: "#projects", label: "Projects" },
-  { href: "#certifications", label: "Certifications" },
   { href: "#experience", label: "Experience" },
+  { href: "#projects", label: "Projects" },
+  { href: "#education", label: "Education" },
+  { href: "#certifications", label: "Certifications" },
   { href: "#contact", label: "Contact" },
 ] as const;
 
@@ -108,9 +107,45 @@ export const STACK_GROUPS = [
 ] as const;
 
 export const MARQUEE_TECH = [
-  "Python", "React", "Node.js", "Express", "Java", "Spring Boot", "Angular", "TypeScript",
-  "FastAPI", "YOLOv8", "OpenCV", "MediaPipe", "Docker", "SQL Server", "MySQL", "MongoDB",
-  "Groq API", "Llama 3.3", "Git", "Leaflet.js", "REST API", "Postman",
+  "Délice Danone",
+  "Safran Electrical & Power",
+  "ENIT Tunis",
+  "YOLOv8",
+  "LLM Fine-Tuning",
+  "Computer Vision",
+  "Sentinel-1 SAR",
+  "Groq API · Llama 3.3",
+] as const;
+
+export const SKILL_BARS = {
+  left: {
+    title: "Artificial Intelligence & CV",
+    items: [
+      { name: "Machine Learning / Deep Learning", pct: 90 },
+      { name: "Computer Vision (YOLOv8 / OpenCV)", pct: 88 },
+      { name: "LLM Fine-Tuning & Prompt Engineering", pct: 82 },
+      { name: "MediaPipe / Gesture Recognition", pct: 80 },
+      { name: "NLP", pct: 75 },
+    ],
+  },
+  right: {
+    title: "Programming & Full-Stack",
+    items: [
+      { name: "Python", pct: 92 },
+      { name: "React / Node.js / Express", pct: 87 },
+      { name: "Java / Spring Boot", pct: 80 },
+      { name: "TypeScript / Angular", pct: 78 },
+      { name: "Docker / SQL / MongoDB", pct: 76 },
+    ],
+  },
+} as const;
+
+export const TECH_CHIPS = [
+  "Python", "Java", "TypeScript", "JavaScript", "SQL", "React", "Node.js", "Express",
+  "Angular", "Spring Boot", "FastAPI", "YOLOv8", "OpenCV", "MediaPipe", "CNN", "LSTM",
+  "Hugging Face", "DistilGPT-2", "Llama 3.3", "Groq API", "Docker", "SQL Server",
+  "MySQL", "MongoDB", "Git", "Postman", "Linux", "Sentinel-1", "GeoTIFF", "Leaflet.js",
+  "Copernicus API", "Roboflow",
 ] as const;
 
 export type Project = {
@@ -125,6 +160,7 @@ export type Project = {
   live?: string;
   /** abstract visual identity for the generated card artwork */
   visual: "pipeline" | "agents" | "recon" | "vision" | "cloud" | "app" | "search" | "game";
+  emoji: string;
 };
 
 export const FEATURED_PROJECTS: Project[] = [
@@ -140,6 +176,7 @@ export const FEATURED_PROJECTS: Project[] = [
     tags: ["Python", "YOLOv8", "OpenCV", "NumPy", "Sentinel-1", "GeoTIFF", "FastAPI", "Leaflet.js", "Copernicus API", "Roboflow"],
     github: "https://github.com/maherbenaicha",
     visual: "vision",
+    emoji: "🛰️",
   },
   {
     slug: "tunisian-sign-language",
@@ -153,6 +190,7 @@ export const FEATURED_PROJECTS: Project[] = [
     tags: ["Python", "OpenCV", "MediaPipe", "CNN", "LSTM", "Deep Learning"],
     github: "https://github.com/maherbenaicha",
     visual: "app",
+    emoji: "🤟",
   },
   {
     slug: "llm-chatbot",
@@ -166,6 +204,7 @@ export const FEATURED_PROJECTS: Project[] = [
     tags: ["Python", "Hugging Face Transformers", "DistilGPT-2", "Docker", "MySQL", "REST API"],
     github: "https://github.com/maherbenaicha",
     visual: "pipeline",
+    emoji: "🤖",
   },
 ];
 
@@ -182,6 +221,7 @@ export const MORE_PROJECTS: Project[] = [
     tags: ["React", "Node.js", "Express", "SQL Server", "Groq API", "Llama 3.3", "Docker"],
     github: "https://github.com/maherbenaicha",
     visual: "app",
+    emoji: "💼",
   },
   {
     slug: "safran-notification-service",
@@ -195,6 +235,7 @@ export const MORE_PROJECTS: Project[] = [
     tags: ["Java", "Spring Boot", "Maven", "SQL Server", "Angular", "TypeScript"],
     github: "https://github.com/maherbenaicha",
     visual: "cloud",
+    emoji: "📧",
   },
 ];
 
@@ -318,7 +359,7 @@ export const LANGUAGES = [
 ] as const;
 
 export const HERO_STATS = [
-  { value: String(ALL_PROJECTS.length), label: "Portfolio Projects" },
-  { value: "ENIT", label: "Software Engineering" },
-  { value: "2", label: "Internships Completed" },
+  { value: "5+", label: "Projects" },
+  { value: "2", label: "Internships" },
+  { value: "ENIT", label: "Top School" },
 ];

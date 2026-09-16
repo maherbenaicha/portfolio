@@ -1,36 +1,79 @@
-import { BriefcaseBusiness, FileText } from "lucide-react";
-import { SectionAccent } from "@/components/ui/SectionAccent";
+import { BriefcaseBusiness, FileText, MapPin } from "lucide-react";
 import { CERTIFICATIONS as CERTS, EXPERIENCE, type ExperienceEntry } from "@/lib/portfolio-data";
 
 function ExperienceCard({ entry }: { entry: ExperienceEntry }) {
   return (
-    <article className="glass-card rounded-xl border border-[#7b8fa8]/20 p-6 sm:p-8">
-      <div className="mb-5 flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
-        <div>
-          <p className="mb-2 font-mono text-xs uppercase tracking-widest text-[#94b8d4]">
-            {entry.org}
-          </p>
-          <h4 className="text-2xl font-bold text-slate-200">{entry.title}</h4>
-          <p className="mt-2 text-sm text-slate-400">{entry.location} · {entry.period}</p>
-        </div>
-        <span className="shrink-0 font-mono text-xs text-slate-400">
-          Engineering Internship
-        </span>
-      </div>
-      <p className="max-w-4xl text-sm leading-relaxed text-slate-300">{entry.description}</p>
-      <div className="mt-5 flex flex-wrap gap-2">
+    <article
+      className="relative rounded-2xl p-6 sm:p-8 transition-all duration-300"
+      style={{
+        background: "rgba(10, 13, 26, 0.6)",
+        border: "1px solid rgba(255,255,255,0.07)",
+        backdropFilter: "blur(12px)",
+      }}
+    >
+      {/* Left accent bar */}
+      <div
+        className="absolute left-0 top-6 bottom-6 w-[3px] rounded-r-full"
+        style={{ background: "linear-gradient(180deg, #7c3aed, #ec4899)" }}
+      />
+
+      {/* Year */}
+      <p className="mb-3 font-mono text-xs font-bold uppercase tracking-widest text-violet-400">
+        {entry.period}
+      </p>
+
+      {/* Title */}
+      <h4 className="text-xl font-bold text-white mb-1">{entry.title}</h4>
+
+      {/* Company */}
+      <p
+        className="text-sm font-semibold mb-2"
+        style={{ color: "#f97316" }}
+      >
+        {entry.org}
+      </p>
+
+      {/* Location */}
+      <p className="flex items-center gap-1.5 text-sm text-slate-400 mb-4">
+        <MapPin size={13} className="shrink-0 text-slate-500" />
+        {entry.location}
+      </p>
+
+      {/* Description */}
+      <p className="text-sm leading-relaxed text-slate-300 mb-5">{entry.description}</p>
+
+      {/* Tech tags */}
+      <div className="flex flex-wrap gap-2">
         {entry.tech.map((skill) => (
-          <span key={skill} className="rounded-full bg-[#7b8fa8]/10 px-2.5 py-1 text-[11px] text-[#94b8d4]">
+          <span
+            key={skill}
+            className="rounded-full px-3 py-1 text-[11px] font-medium text-slate-300"
+            style={{
+              background: "rgba(255,255,255,0.05)",
+              border: "1px solid rgba(255,255,255,0.1)",
+            }}
+          >
             {skill}
           </span>
         ))}
       </div>
+
+      {/* Links */}
       {entry.links.length > 0 && (
-        <div className="mt-6 flex flex-wrap gap-3">
+        <div className="mt-5 flex flex-wrap gap-3">
           {entry.links.map((link) => (
-            <a key={link.href} href={link.href} target="_blank" rel="noopener noreferrer"
-              className="flex items-center gap-2 rounded-lg border border-[#7b8fa8]/20 bg-[#7b8fa8]/10 px-4 py-2.5 text-sm font-medium text-[#94b8d4] transition-colors hover:bg-[#7b8fa8]/20">
-              <FileText size={16} aria-hidden="true" />
+            <a
+              key={link.href}
+              href={link.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium text-slate-300 transition-colors"
+              style={{
+                background: "rgba(255,255,255,0.05)",
+                border: "1px solid rgba(255,255,255,0.1)",
+              }}
+            >
+              <FileText size={14} />
               {link.label}
             </a>
           ))}
@@ -43,61 +86,85 @@ function ExperienceCard({ entry }: { entry: ExperienceEntry }) {
 export function Experience() {
   return (
     <>
-      <section id="experience" className="relative overflow-hidden px-6 py-20 lg:px-20">
-        <SectionAccent label="// experience" position="top-right" />
-        <div className="relative z-10 mx-auto max-w-7xl">
-          <div className="mb-16">
-            <p className="mb-3 font-mono text-xs uppercase tracking-widest text-[#94b8d4]">Professional Experience</p>
-            <h2 className="text-4xl font-black text-slate-100 md:text-5xl">Experience</h2>
+      <section id="experience" className="relative overflow-hidden px-6 py-24 lg:px-20">
+        <div className="relative z-10 mx-auto max-w-5xl">
+          {/* Header */}
+          <div className="mb-14">
+            <span className="section-label">Career</span>
+            <h2 className="section-title">Professional Experience</h2>
+            <p className="section-sub">
+              Engineering internships translating research into production systems.
+            </p>
           </div>
 
-          <div>
-            <div className="mb-8 flex items-center gap-4 border-b border-[#7b8fa8]/20 pb-4">
-              <BriefcaseBusiness size={28} className="text-[#94b8d4]" aria-hidden="true" />
-              <h3 className="text-3xl font-bold tracking-tight text-slate-100">Internships</h3>
-            </div>
-            <div className="space-y-6">
-              {EXPERIENCE.map((entry) => (
-                <ExperienceCard key={entry.org} entry={entry} />
-              ))}
-            </div>
+          <div className="space-y-6">
+            {EXPERIENCE.map((entry) => (
+              <ExperienceCard key={entry.org + entry.period} entry={entry} />
+            ))}
           </div>
         </div>
       </section>
 
       {/* Certifications */}
-      <section className="relative overflow-hidden px-6 py-20 lg:px-20">
-        <SectionAccent label="// certifications" position="top-right" />
-        <div className="max-w-7xl mx-auto">
-          <div id="certifications">
-            <div className="flex items-center gap-4 mb-10 pb-4 border-b border-[#7b8fa8]/20">
-              <div className="w-12 h-12 rounded-xl bg-[#7b8fa8]/10 border border-[#7b8fa8]/20 flex items-center justify-center shrink-0">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" className="text-[#94b8d4]" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <section className="relative overflow-hidden px-6 py-16 lg:px-20">
+        <div className="max-w-5xl mx-auto">
+          <div id="certifications" className="scroll-mt-24">
+            <div className="flex items-center gap-4 mb-10 pb-4" style={{ borderBottom: "1px solid rgba(255,255,255,0.07)" }}>
+              <div
+                className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0"
+                style={{
+                  background: "rgba(124,58,237,0.15)",
+                  border: "1px solid rgba(124,58,237,0.25)",
+                }}
+              >
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#a855f7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <circle cx="12" cy="8" r="6" />
-                  <path d="M15.477 12.89L17 22l-5-3-5 3-1.523-9.11" />
+                  <path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11" />
                 </svg>
               </div>
-              <h3 className="text-3xl font-bold text-slate-100 tracking-tight">Certifications</h3>
+              <h3 className="text-2xl font-bold text-white tracking-tight">Certifications</h3>
             </div>
+
             <div className="space-y-5">
               {CERTS.map((cert) => (
-                <div key={cert.name} className="rounded-2xl glass-card p-6">
+                <div
+                  key={cert.name}
+                  className="rounded-2xl p-6"
+                  style={{
+                    background: "rgba(10, 13, 26, 0.6)",
+                    border: "1px solid rgba(255,255,255,0.07)",
+                    backdropFilter: "blur(12px)",
+                  }}
+                >
                   <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-xl bg-[#7b8fa8]/10 border border-[#7b8fa8]/20 flex items-center justify-center shrink-0">
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#94b8d4" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <div
+                      className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 mt-0.5"
+                      style={{
+                        background: "rgba(124,58,237,0.12)",
+                        border: "1px solid rgba(124,58,237,0.2)",
+                      }}
+                    >
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a855f7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <circle cx="12" cy="8" r="6" />
                         <path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11" />
                       </svg>
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-base font-semibold text-slate-100">{cert.name}</p>
-                      <p className="text-xs text-[#94b8d4]">{cert.org} · {cert.date}</p>
+                      <p className="text-base font-semibold text-white">{cert.name}</p>
+                      <p className="text-xs text-violet-400 mt-0.5">{cert.org} · {cert.date}</p>
                       <p className="text-sm text-slate-400 mt-3 leading-relaxed">{cert.summary}</p>
                     </div>
                   </div>
                   <div className="mt-4 flex flex-wrap gap-2">
                     {cert.skills.map((skill) => (
-                      <span key={skill} className="text-[11px] px-2.5 py-1 rounded-full bg-[#7b8fa8]/10 text-[#94b8d4]">
+                      <span
+                        key={skill}
+                        className="text-[11px] px-3 py-1 rounded-full text-slate-300"
+                        style={{
+                          background: "rgba(255,255,255,0.05)",
+                          border: "1px solid rgba(255,255,255,0.1)",
+                        }}
+                      >
                         {skill}
                       </span>
                     ))}
@@ -105,12 +172,12 @@ export function Experience() {
                   {(cert.href || cert.verifyHref) && (
                     <div className="mt-4 flex flex-wrap gap-3">
                       {cert.href && (
-                        <a href={cert.href} target="_blank" rel="noopener noreferrer" className="text-xs font-mono text-slate-400 hover:text-[#94b8d4] transition-colors">
+                        <a href={cert.href} target="_blank" rel="noopener noreferrer" className="text-xs font-mono text-slate-400 hover:text-violet-400 transition-colors">
                           View certificate →
                         </a>
                       )}
                       {cert.verifyHref && (
-                        <a href={cert.verifyHref} target="_blank" rel="noopener noreferrer" className="text-xs font-mono text-slate-400 hover:text-[#94b8d4] transition-colors">
+                        <a href={cert.verifyHref} target="_blank" rel="noopener noreferrer" className="text-xs font-mono text-slate-400 hover:text-violet-400 transition-colors">
                           Verify →
                         </a>
                       )}

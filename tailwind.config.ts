@@ -10,19 +10,22 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["var(--font-space)", "system-ui", "sans-serif"],
+        sans: ["var(--font-dm)", "system-ui", "sans-serif"],
+        display: ["var(--font-syne)", "sans-serif"],
         mono: ["var(--font-plex)", "monospace"],
-        display: ["var(--font-space)", "sans-serif"],
         caveat: ["var(--font-caveat)", "cursive"],
       },
       colors: {
-        ink: "#0c0c0c",
-        paper: "#d7e2ea",
+        ink: "#06070f",
+        paper: "#e2e8f0",
         accent: {
-          DEFAULT: "#69b7ff",
-          soft: "#8ccfff",
+          DEFAULT: "#7c3aed",
+          pink: "#ec4899",
+          cyan: "#06b6d4",
+          amber: "#f59e0b",
+          soft: "#c4b5fd",
         },
-        primary: "#94b8d4",
+        primary: "#7c3aed",
         cyan: {
           50:  "#e8f0f7",
           100: "#d1e1ef",
