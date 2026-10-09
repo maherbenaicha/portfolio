@@ -9,12 +9,12 @@ import { PersonJsonLd, WebsiteJsonLd } from "@/components/ui/JsonLd";
 import "./globals.css";
 
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://maher-ben-aicha.vercel.app";
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://maherbenaicha.vercel.app";
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
   title: {
-    default: "Maher Ben Aicha — Software Engineering Student at ENIT",
+    default: "Maher Ben Aicha (maherbenaicha) — AI & Software Engineering Portfolio",
     template: "%s | Maher Ben Aicha",
   },
   description:
@@ -34,7 +34,6 @@ export const metadata: Metadata = {
     siteName: "Maher Ben Aicha",
     title: "Maher Ben Aicha — Software Engineering Student",
     description: "Final-year software engineering student at ENIT working on AI, computer vision, machine learning, and full-stack development.",
-    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Maher Ben Aicha — Portfolio" }],
   },
   twitter: {
     card: "summary_large_image",
@@ -52,9 +51,9 @@ export const metadata: Metadata = {
       "max-snippet": -1,
     },
   },
-  verification: {
-    google: "PASTE_YOUR_GOOGLE_VERIFICATION_TOKEN_HERE",
-  },
+  ...(process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION
+    ? { verification: { google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION } }
+    : {}),
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

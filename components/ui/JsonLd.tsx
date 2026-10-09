@@ -1,4 +1,4 @@
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://maher-ben-aicha.vercel.app";
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://maherbenaicha.vercel.app";
 
 export function PersonJsonLd() {
   const schema = {
@@ -6,7 +6,7 @@ export function PersonJsonLd() {
     "@type": "Person",
     name: "Maher Ben Aicha",
     url: BASE_URL,
-    image: `${BASE_URL}/og-image.png`,
+    image: `${BASE_URL}/assets/maher-portrait.jpg`,
     jobTitle: "Software Engineering Student",
     affiliation: {
       "@type": "CollegeOrUniversity",
