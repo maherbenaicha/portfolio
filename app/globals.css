@@ -10,38 +10,40 @@
   --font-display: "Manrope Variable", system-ui, sans-serif;
   --font-serif: "Fraunces", Georgia, serif;
   --font-mono: "JetBrains Mono Variable", ui-monospace, monospace;
-  --bg: #0a0c0f;
-  --bg-2: #0f1216;
-  --surface: #13171c;
-  --surface-2: #191e24;
-  --line: rgba(232, 236, 230, 0.08);
-  --line-strong: rgba(232, 236, 230, 0.16);
-  --text: #e8ece6;
-  --muted: #8d969f;
-  --faint: #5c656e;
-  --accent: #2dd4bf;
-  --accent-ink: #062a26;
-  --accent-soft: rgba(45, 212, 191, 0.12);
-  --warm: #f5b54a;
-  --glow: rgba(45, 212, 191, 0.16);
+  --bg: #0c0a12;
+  --bg-2: #13101c;
+  --surface: rgba(255, 255, 255, 0.035);
+  --surface-2: rgba(255, 255, 255, 0.06);
+  --line: rgba(236, 232, 248, 0.09);
+  --line-strong: rgba(236, 232, 248, 0.18);
+  --text: #f2eff9;
+  --muted: #a39db3;
+  --faint: #6f6981;
+  --accent: #b69cff;
+  --accent-ink: #160f2a;
+  --accent-soft: rgba(182, 156, 255, 0.14);
+  --warm: #f0b8d8;
+  --glow: rgba(124, 88, 232, 0.28);
+  --glow-2: rgba(84, 56, 170, 0.22);
   color-scheme: dark;
 }
 
 :root[data-theme="light"] {
-  --bg: #f5f3ee;
-  --bg-2: #eeebe4;
-  --surface: #ffffff;
-  --surface-2: #f8f6f1;
-  --line: rgba(20, 23, 26, 0.09);
-  --line-strong: rgba(20, 23, 26, 0.18);
-  --text: #14171a;
-  --muted: #5a626a;
-  --faint: #8a9198;
-  --accent: #0f766e;
+  --bg: #f7f5fc;
+  --bg-2: #efebf8;
+  --surface: rgba(255, 255, 255, 0.75);
+  --surface-2: #ffffff;
+  --line: rgba(30, 20, 60, 0.09);
+  --line-strong: rgba(30, 20, 60, 0.18);
+  --text: #17122a;
+  --muted: #5d5670;
+  --faint: #8d86a0;
+  --accent: #6d4ae0;
   --accent-ink: #ffffff;
-  --accent-soft: rgba(15, 118, 110, 0.1);
-  --warm: #b45309;
-  --glow: rgba(15, 118, 110, 0.12);
+  --accent-soft: rgba(109, 74, 224, 0.1);
+  --warm: #b4307a;
+  --glow: rgba(124, 88, 232, 0.14);
+  --glow-2: rgba(84, 56, 170, 0.08);
   color-scheme: light;
 }
 
@@ -51,7 +53,11 @@
     scroll-padding-top: 88px;
   }
   body {
-    background: var(--bg);
+    background:
+      radial-gradient(1200px 700px at 85% -10%, var(--glow), transparent 60%),
+      radial-gradient(900px 600px at -10% 40%, var(--glow-2), transparent 60%),
+      radial-gradient(1000px 700px at 110% 80%, var(--glow-2), transparent 60%),
+      var(--bg);
     color: var(--text);
     font-feature-settings: "ss01", "cv11";
     transition: background-color 0.3s ease, color 0.3s ease;
@@ -86,6 +92,41 @@
     .section { padding-block: 128px; }
   }
 
+  .pill-label {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 12px;
+    border-radius: 999px;
+    border: 1px solid var(--accent-soft);
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .glass {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 22px;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+  .tile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 92px;
+    padding: 12px 6px;
+    border-radius: 14px;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    text-align: center;
+    font-size: 12px;
+    color: var(--muted);
+    transition: transform 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+  }
+  .tile:hover { transform: translateY(-2px); border-color: var(--accent); color: var(--text); }
   .eyebrow {
     font-family: var(--font-mono);
     font-size: 11px;
@@ -231,6 +272,13 @@
   animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
 }
 
+.orbit-spin { animation: orbit 60s linear infinite; }
+.orbit-counter { animation: orbit-counter 60s linear infinite; }
+@keyframes orbit { to { transform: rotate(360deg); } }
+@keyframes orbit-counter {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(-360deg); }
+}
 @keyframes scan {
   0%, 100% { transform: translateY(0); opacity: 0.9; }
   50% { transform: translateY(var(--scan-distance, 300px)); opacity: 0.9; }
@@ -249,5 +297,5 @@
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .js .reveal { opacity: 1; transform: none; transition: none; animation: none; }
-  .scanline, .det-box, .pulse-dot::after { animation: none; }
+  .scanline, .det-box, .pulse-dot::after, .orbit-spin, .orbit-counter { animation: none; }
 }

@@ -253,7 +253,10 @@ export const MORE_PROJECTS: Project[] = [
   },
 ];
 
-export const ALL_PROJECTS = [...FEATURED_PROJECTS, ...MORE_PROJECTS];
+const PROJECT_ORDER = ["stagedelice", "oilscan", "tunisian-sign-language", "safran-notification-service", "llm-chatbot"];
+export const ALL_PROJECTS = [...FEATURED_PROJECTS, ...MORE_PROJECTS].sort(
+  (a, b) => PROJECT_ORDER.indexOf(a.slug) - PROJECT_ORDER.indexOf(b.slug),
+);
 
 export type ExperienceEntry = {
   org: string;
@@ -378,47 +381,50 @@ export const HERO_STATS = [
   { value: "ENIT", label: "Top School" },
 ];
 
-/* ── Editorial hero + grouped skills (2026 redesign) ── */
+/* ── Hero + grouped skills ── */
 
 export const HERO = {
   eyebrow: "AI · Computer Vision · Full-Stack",
-  line1: "Teaching machines",
-  accent: "to see,",
-  line3: "then shipping it.",
+  line1: "Building machines",
+  accent: "that see",
+  line3: "and understand.",
   availability: "Open to a 4–6 month AI / software engineering internship (PFE)",
 } as const;
+
+export const ABOUT_HIGHLIGHT =
+  "Two industry internships, at Délice Danone and Safran Electrical & Power, taught me to ship software that real teams depend on, and I bring that same rigor to every AI project I build.";
 
 export type SkillCategory = { title: string; blurb: string; items: string[] };
 
 export const SKILL_CATEGORIES: SkillCategory[] = [
   {
-    title: "Computer Vision",
-    blurb: "Detection, tracking and recognition on images and video.",
-    items: ["YOLOv8", "OpenCV", "MediaPipe", "CNN", "Roboflow"],
+    title: "LLMs & GenAI",
+    blurb: "Models and APIs I use to build language-driven features.",
+    items: ["Hugging Face", "Groq", "Ollama", "Gemma", "DeepSeek", "Llama 3.3"],
   },
   {
-    title: "ML, DL & LLMs",
-    blurb: "Training sequence models and putting language models to work.",
-    items: ["Deep Learning", "LSTM", "Hugging Face", "DistilGPT-2", "Llama 3.3", "Groq API", "Prompt Engineering"],
+    title: "Machine & Deep Learning",
+    blurb: "Frameworks for training, detection and visual understanding.",
+    items: ["TensorFlow", "PyTorch", "Scikit-learn", "Keras", "OpenCV", "MediaPipe", "YOLOv8", "Roboflow"],
   },
   {
     title: "Python & Data",
-    blurb: "Where every experiment starts.",
-    items: ["Python", "NumPy", "Jupyter", "SQL", "Sentinel-1", "GeoTIFF"],
+    blurb: "Languages and tools for analysis and experiments.",
+    items: ["Python", "NumPy", "Pandas", "Jupyter", "MATLAB", "C/C++", "Java"],
   },
   {
-    title: "Web & APIs",
-    blurb: "Interfaces and services that put models in people's hands.",
-    items: ["React", "Next.js", "Node.js", "Express", "FastAPI", "Angular", "Spring Boot", "Leaflet.js"],
+    title: "Web & Apps",
+    blurb: "Front ends, back ends and mobile apps around the models.",
+    items: ["HTML5", "CSS3", "TypeScript", "React", "Next.js", "Angular", "Node.js", "Express", "FastAPI", "Spring Boot", ".NET", "Streamlit", "Flutter", "WordPress"],
   },
   {
     title: "Databases",
-    blurb: "Relational and document storage.",
-    items: ["SQL Server", "MySQL", "MongoDB"],
+    blurb: "Relational, document and in-memory storage.",
+    items: ["MySQL", "PostgreSQL", "SQLite", "SQL Server", "MongoDB", "Redis"],
   },
   {
     title: "Dev Tools",
-    blurb: "Everyday tooling for code, containers and APIs.",
-    items: ["Git", "GitHub", "Docker", "Linux", "Postman", "n8n"],
+    blurb: "Daily tooling for code, containers and automation.",
+    items: ["Git", "GitHub", "Docker", "Linux", "Bash", "Postman", "n8n"],
   },
 ];

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowUpRight, Check, Copy, Download, Github, Linkedin, Phone } from "lucide-react";
+import { Check, Copy, Download, Github, Linkedin, Phone } from "lucide-react";
 import { FadeIn } from "@/components/motion/FadeIn";
 import { SOCIALS } from "@/lib/portfolio-data";
 
@@ -42,111 +42,65 @@ export function Contact() {
   const links = [
     { label: "LinkedIn", href: SOCIALS.linkedin, icon: Linkedin, external: true },
     { label: "GitHub", href: SOCIALS.github, icon: Github, external: true },
-    { label: SOCIALS.phone, href: SOCIALS.phoneHref, icon: Phone, external: false },
+    { label: "Phone", href: SOCIALS.phoneHref, icon: Phone, external: false },
     { label: "Download CV", href: SOCIALS.resume, icon: Download, external: true },
   ];
 
+  const pill =
+    "inline-flex items-center gap-2 rounded-full border border-line-strong px-4 py-2.5 text-sm font-semibold transition-colors hover:border-accent hover:text-accent";
+
   return (
     <section id="contact" className="section">
-      <div className="container-x grid gap-14 lg:grid-cols-[1fr_1.05fr]">
-        <FadeIn>
-          <p className="eyebrow flex items-center gap-3">
-            <span className="text-faint">06</span>
-            <span className="h-px w-8 bg-line-strong" />
-            Contact
-          </p>
+      <div className="container-x">
+        <FadeIn className="mb-10">
+          <span className="pill-label">Contact</span>
           <h2 className="section-title mt-5">
-            Have an internship <span className="serif-accent">in mind?</span>
+            Let&apos;s <span className="serif-accent">talk.</span>
           </h2>
-          <p className="mt-6 max-w-md text-lg leading-relaxed text-muted">
-            An opportunity, a project or just a question: send me a message and I&apos;ll get back to you.
+          <p className="mt-4 max-w-2xl text-lg text-muted">
+            An internship, a project or a question? Drop me a message and I&apos;ll get back to you.
           </p>
-
-          <button
-            type="button"
-            onClick={copyEmail}
-            className="group mt-10 flex max-w-full items-center gap-3 text-left font-display text-lg font-semibold tracking-tight transition-colors hover:text-accent sm:text-xl"
-          >
-            <span className="break-all">{SOCIALS.email}</span>
-            <span className="icon-btn h-9 w-9 shrink-0" aria-hidden="true">
-              {copied ? <Check size={15} /> : <Copy size={15} />}
-            </span>
-            <span className="sr-only">{copied ? "Email copied" : "Copy email address"}</span>
-          </button>
-
-          <ul className="mt-10 border-t border-line">
-            {links.map(({ label, href, icon: Icon, external }) => (
-              <li key={label} className="border-b border-line">
-                <a
-                  href={href}
-                  {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                  className="group flex items-center justify-between py-4 text-muted transition-colors hover:text-text"
-                >
-                  <span className="flex items-center gap-3">
-                    <Icon size={17} className="text-accent" />
-                    {label}
-                  </span>
-                  <ArrowUpRight size={16} className="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-                </a>
-              </li>
-            ))}
-          </ul>
         </FadeIn>
 
-        <FadeIn delay={0.08}>
-          <form onSubmit={handleSubmit} className="card space-y-5 p-7 md:p-9">
-            <div>
-              <label htmlFor="c-name" className="mb-2 block font-mono text-[11px] uppercase tracking-[0.16em] text-faint">
-                Name
-              </label>
-              <input
-                id="c-name"
-                required
-                autoComplete="name"
-                className="field"
-                placeholder="Your name"
-                value={form.name}
-                onChange={(e) => setForm({ ...form, name: e.target.value })}
-              />
+        <FadeIn delay={0.06}>
+          <form onSubmit={handleSubmit} className="glass p-6 md:p-9">
+            <div className="grid gap-5 md:grid-cols-2">
+              <div>
+                <label htmlFor="c-name" className="mb-2 block text-sm font-semibold text-muted">Name</label>
+                <input id="c-name" required autoComplete="name" className="field" value={form.name}
+                  onChange={(e) => setForm({ ...form, name: e.target.value })} />
+              </div>
+              <div>
+                <label htmlFor="c-email" className="mb-2 block text-sm font-semibold text-muted">Email</label>
+                <input id="c-email" type="email" required autoComplete="email" className="field" value={form.email}
+                  onChange={(e) => setForm({ ...form, email: e.target.value })} />
+              </div>
             </div>
-            <div>
-              <label htmlFor="c-email" className="mb-2 block font-mono text-[11px] uppercase tracking-[0.16em] text-faint">
-                Email
-              </label>
-              <input
-                id="c-email"
-                type="email"
-                required
-                autoComplete="email"
-                className="field"
-                placeholder="you@company.com"
-                value={form.email}
-                onChange={(e) => setForm({ ...form, email: e.target.value })}
-              />
+            <div className="mt-5">
+              <label htmlFor="c-msg" className="mb-2 block text-sm font-semibold text-muted">Message</label>
+              <textarea id="c-msg" required rows={5} className="field resize-y" value={form.message}
+                onChange={(e) => setForm({ ...form, message: e.target.value })} />
             </div>
-            <div>
-              <label htmlFor="c-msg" className="mb-2 block font-mono text-[11px] uppercase tracking-[0.16em] text-faint">
-                Message
-              </label>
-              <textarea
-                id="c-msg"
-                required
-                rows={6}
-                className="field resize-none"
-                placeholder="Tell me about the role or project…"
-                value={form.message}
-                onChange={(e) => setForm({ ...form, message: e.target.value })}
-              />
-            </div>
-            <button type="submit" disabled={status === "loading"} className="btn btn-primary w-full justify-center disabled:opacity-60">
+            <button type="submit" disabled={status === "loading"}
+              className="mt-5 inline-flex h-12 items-center rounded-full bg-accent px-6 text-sm font-bold text-accent-ink transition-transform hover:-translate-y-0.5 disabled:opacity-60">
               {status === "loading" ? "Sending…" : "Send message"}
             </button>
-            <p role="status" aria-live="polite" className="min-h-[1.25rem] text-sm">
+            <p role="status" aria-live="polite" className="mt-3 min-h-[1.25rem] text-sm">
               {status === "success" && <span className="text-accent">Thanks! Your message is on its way.</span>}
-              {status === "error" && (
-                <span className="text-warm">Something went wrong. Please email me directly instead.</span>
-              )}
+              {status === "error" && <span className="text-warm">Something went wrong. Please email me directly instead.</span>}
             </p>
+
+            <div className="mt-4 flex flex-wrap gap-2 border-t border-line pt-6">
+              {links.map(({ label, href, icon: Icon, external }) => (
+                <a key={label} href={href} className={pill}
+                  {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}>
+                  <Icon size={15} /> {label}
+                </a>
+              ))}
+              <button type="button" onClick={copyEmail} className={pill}>
+                {copied ? <Check size={15} /> : <Copy size={15} />} {copied ? "Copied!" : "Copy email"}
+              </button>
+            </div>
           </form>
         </FadeIn>
       </div>

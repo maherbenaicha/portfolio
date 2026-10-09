@@ -1,73 +1,81 @@
-import { ArrowUpRight, Github, Plus } from "lucide-react";
+import { Github, Plus } from "lucide-react";
 import { FadeIn } from "@/components/motion/FadeIn";
 import { SectionHeader } from "@/components/ui/SectionHeader";
+import { TechIcon, hasTechIcon } from "@/components/ui/TechIcon";
 import { ALL_PROJECTS, type Project } from "@/lib/portfolio-data";
 
-function ProjectCard({ project, index, featured }: { project: Project; index: number; featured: boolean }) {
+/** Generated cover: soft gradient, grid texture and the project's main tools. */
+function Cover({ project, index }: { project: Project; index: number }) {
+  const icons = project.tags.filter(hasTechIcon).slice(0, 4);
+  const hues = [262, 285, 232, 310, 250];
+  const h = hues[index % hues.length];
   return (
-    <article
-      className={`card group flex h-full flex-col p-7 md:p-9 hover:-translate-y-0.5 ${
-        featured ? "md:col-span-2 lg:col-span-1" : ""
-      }`}
+    <div
+      className="relative flex min-h-[190px] flex-col justify-between overflow-hidden rounded-2xl border border-line p-5 md:min-h-full md:p-6"
+      style={{
+        background: `radial-gradient(120% 90% at 0% 0%, hsla(${h},80%,62%,0.35), transparent 60%), radial-gradient(100% 80% at 100% 100%, hsla(${h + 30},70%,55%,0.22), transparent 60%), var(--bg-2)`,
+      }}
+      aria-hidden="true"
     >
-      <div className="flex items-start justify-between gap-6">
-        <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-accent">
-          {project.context ?? `${project.category} · ${project.year}`}
-        </p>
-        <span className="font-mono text-[11px] text-faint">{String(index + 1).padStart(2, "0")}</span>
+      <div className="bg-grid pointer-events-none absolute inset-0 opacity-60" />
+      <span className="relative font-mono text-[11px] uppercase tracking-[0.16em] text-muted">{project.category}</span>
+      <div className="relative flex gap-2">
+        {icons.map((t) => (
+          <span key={t} className="grid h-11 w-11 place-items-center rounded-xl border border-line-strong bg-bg/70 text-text backdrop-blur">
+            <TechIcon name={t} size={20} />
+          </span>
+        ))}
       </div>
+    </div>
+  );
+}
 
-      <h3 className="mt-5 font-display text-2xl font-bold leading-tight tracking-tight md:text-[1.7rem]">
-        {project.name}
-      </h3>
-      <p className="mt-3 leading-relaxed text-muted">{project.shortDesc}</p>
+function ProjectCard({ project, index }: { project: Project; index: number }) {
+  return (
+    <article className="glass grid gap-6 p-4 md:grid-cols-[0.8fr_1.2fr] md:p-5">
+      <Cover project={project} index={index} />
+      <div className="flex flex-col py-1 md:py-2 md:pr-3">
+        <span className="pill-label self-start">{project.context ?? project.year}</span>
+        <h3 className="mt-4 font-display text-2xl font-bold leading-tight tracking-tight">{project.name}</h3>
+        <p className="mt-2 leading-relaxed text-muted">{project.shortDesc}</p>
 
-      {project.metrics && project.metrics.length > 0 && (
-        <ul className="mt-6 grid gap-px overflow-hidden rounded-xl border border-line bg-line sm:grid-cols-2">
-          {project.metrics.map((m) => (
-            <li key={m} className="bg-bg-2 px-4 py-3 text-sm font-semibold text-text">
-              {m}
+        {project.metrics && (
+          <ul className="mt-4 flex flex-wrap gap-2">
+            {project.metrics.map((m) => (
+              <li key={m} className="rounded-full border border-line-strong bg-surface-2 px-3 py-1 text-xs font-semibold text-text">
+                {m}
+              </li>
+            ))}
+          </ul>
+        )}
+
+        <ul className="mt-4 flex flex-wrap gap-2">
+          {project.tags.map((t) => (
+            <li key={t} className="chip">
+              {hasTechIcon(t) && <TechIcon name={t} size={13} />}
+              {t}
             </li>
           ))}
         </ul>
-      )}
 
-      <ul className="mt-6 flex flex-wrap gap-2">
-        {project.tags.slice(0, 6).map((t) => (
-          <li key={t} className="chip">
-            {t}
-          </li>
-        ))}
-        {project.tags.length > 6 && <li className="chip">+{project.tags.length - 6}</li>}
-      </ul>
-
-      <details className="group/d mt-6 border-t border-line pt-5">
-        <summary className="flex cursor-pointer list-none items-center gap-2 font-mono text-[11px] uppercase tracking-[0.16em] text-muted transition-colors hover:text-text [&::-webkit-details-marker]:hidden">
-          <Plus size={14} className="transition-transform group-open/d:rotate-45" />
-          Details
-        </summary>
-        <p className="mt-4 text-sm leading-relaxed text-muted">{project.fullDesc}</p>
-      </details>
-
-      <div className="mt-auto flex items-center gap-4 pt-6">
-        <a
-          href={project.github}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 text-sm text-text transition-colors hover:text-accent"
-        >
-          <Github size={16} /> GitHub
-        </a>
-        {project.live && (
+        <div className="mt-auto pt-5">
+          <details className="group/d">
+            <summary className="flex w-fit cursor-pointer list-none items-center gap-4 [&::-webkit-details-marker]:hidden">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-line-strong px-4 py-2 text-xs font-semibold transition-colors hover:border-accent hover:text-accent">
+                <Plus size={13} className="transition-transform group-open/d:rotate-45" /> Details
+              </span>
+            </summary>
+            <p className="mt-4 text-sm leading-relaxed text-muted">{project.fullDesc}</p>
+          </details>
           <a
-            href={project.live}
+            href={project.github}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-sm text-text transition-colors hover:text-accent"
+            className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-line-strong px-4 py-2 text-xs font-semibold transition-colors hover:border-accent hover:text-accent"
           >
-            Live <ArrowUpRight size={15} />
+            <Github size={13} /> GitHub
           </a>
-        )}
+        </div>
       </div>
     </article>
   );
@@ -78,17 +86,15 @@ export function Projects() {
     <section id="projects" className="section">
       <div className="container-x">
         <SectionHeader
-          index="03"
           label="Projects"
-          title="Models, meet"
-          accent="real-world use."
-          intro="From satellite imagery to sign language: research-driven builds, shipped end to end."
+          title="From models"
+          accent="to products."
+          intro="Internship and school projects, built end to end."
         />
-
-        <div className="grid gap-5 md:grid-cols-2">
+        <div className="space-y-5">
           {ALL_PROJECTS.map((p, i) => (
-            <FadeIn key={p.slug} delay={(i % 2) * 0.08} className={i === 0 ? "md:col-span-2" : ""}>
-              <ProjectCard project={p} index={i} featured={i === 0} />
+            <FadeIn key={p.slug} delay={0.04}>
+              <ProjectCard project={p} index={i} />
             </FadeIn>
           ))}
         </div>

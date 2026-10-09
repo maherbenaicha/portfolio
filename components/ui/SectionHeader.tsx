@@ -1,28 +1,21 @@
 import { FadeIn } from "@/components/motion/FadeIn";
 
 type Props = {
-  index: string;
   label: string;
   title: string;
   accent: string;
   intro?: string;
 };
 
-/** "01 — Label" eyebrow, a bold title with an italic serif accent, and an optional intro. */
-export function SectionHeader({ index, label, title, accent, intro }: Props) {
+/** Pill label, bold title with an italic serif accent, and a short intro line. */
+export function SectionHeader({ label, title, accent, intro }: Props) {
   return (
-    <FadeIn className="mb-14 grid gap-6 md:mb-20 md:grid-cols-[1fr_minmax(0,380px)] md:items-end">
-      <div>
-        <p className="eyebrow flex items-center gap-3">
-          <span className="text-faint">{index}</span>
-          <span className="h-px w-8 bg-line-strong" />
-          {label}
-        </p>
-        <h2 className="section-title mt-5">
-          {title} <span className="serif-accent">{accent}</span>
-        </h2>
-      </div>
-      {intro && <p className="text-base leading-relaxed text-muted md:pb-2">{intro}</p>}
+    <FadeIn className="mb-10 md:mb-14">
+      <span className="pill-label">{label}</span>
+      <h2 className="section-title mt-5">
+        {title} <span className="serif-accent">{accent}</span>
+      </h2>
+      {intro && <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted md:text-lg">{intro}</p>}
     </FadeIn>
   );
 }

@@ -7,9 +7,9 @@ import { SOCIALS } from "@/lib/portfolio-data";
 const LINKS = [
   { href: "#about", label: "About" },
   { href: "#skills", label: "Skills" },
-  { href: "#projects", label: "Projects" },
-  { href: "#experience", label: "Experience" },
   { href: "#education", label: "Education" },
+  { href: "#projects", label: "Projects" },
+  { href: "#community", label: "Community" },
   { href: "#contact", label: "Contact" },
 ];
 
@@ -56,20 +56,21 @@ export function Navbar() {
     >
       <nav className="container-x flex h-[72px] items-center justify-between" aria-label="Main">
         <a href="#top" className="font-display text-lg font-extrabold tracking-tight" aria-label="Maher Ben Aicha — home">
-          MB<span className="text-accent">.</span>
+          MB
         </a>
 
-        <ul className="hidden items-center gap-8 lg:flex">
-          {LINKS.map((l) => (
-            <li key={l.href}>
-              <a href={l.href} className="text-sm text-muted transition-colors hover:text-text">
-                {l.label}
-              </a>
-            </li>
-          ))}
-        </ul>
 
         <div className="flex items-center gap-2">
+          <button
+            type="button"
+            className="icon-btn"
+            onClick={() => setOpen((v) => !v)}
+            aria-expanded={open}
+            aria-controls="mobile-menu"
+            aria-label={open ? "Close menu" : "Open menu"}
+          >
+            {open ? <X size={18} /> : <Menu size={18} />}
+          </button>
           <button
             type="button"
             onClick={toggle}
@@ -82,25 +83,15 @@ export function Navbar() {
             href={SOCIALS.resume}
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden h-[42px] items-center rounded-full border border-accent px-4 font-mono text-[11px] uppercase tracking-[0.16em] text-accent transition-colors hover:bg-accent hover:text-accent-ink sm:inline-flex"
+            className="inline-flex h-[42px] items-center rounded-full border border-accent px-4 text-xs font-bold text-accent transition-colors hover:bg-accent hover:text-accent-ink"
           >
             CV
           </a>
-          <button
-            type="button"
-            className="icon-btn lg:hidden"
-            onClick={() => setOpen((v) => !v)}
-            aria-expanded={open}
-            aria-controls="mobile-menu"
-            aria-label={open ? "Close menu" : "Open menu"}
-          >
-            {open ? <X size={18} /> : <Menu size={18} />}
-          </button>
         </div>
       </nav>
 
       {open && (
-        <div id="mobile-menu" className="container-x h-[calc(100dvh-72px)] pb-10 pt-6 lg:hidden">
+        <div id="mobile-menu" className="container-x h-[calc(100dvh-72px)] overflow-y-auto pb-10 pt-6">
           <ul className="flex flex-col">
             {LINKS.map((l, i) => (
               <li key={l.href} className="border-b border-line">
