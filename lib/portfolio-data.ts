@@ -32,7 +32,7 @@ export const SOCIALS = {
  *  photo cutout whenever one is available; the rest of the Hero treats it as
  *  a plain image (oval mask, backlight, rim light are all applied in CSS). */
 export const PORTRAIT = {
-  current: "/assets/maher-portrait.png",
+  current: "/assets/maher-portrait.jpg",
   alt: "Maher Ben Aicha",
 } as const;
 

@@ -30,10 +30,7 @@ npm run start
 
 ## Before you deploy
 
-1. **Photo** — `public/assets/maher-portrait.png` and `app/icon.jpg` are placeholder
-   monograms (no photo was supplied). Swap them for a real photo/cutout if you'd like —
-   the Hero component (`components/sections/Hero.tsx`) treats it as a plain image, so any
-   PNG with a transparent or matching background will work.
+1. **Photo**: `public/assets/maher-portrait.jpg` is shown in the center of the hero orbit. Replace it with any square photo (800×800 is plenty) to update it.
 2. **LinkedIn URL** — `lib/portfolio-data.ts` → `SOCIALS.linkedin` currently points to
    `https://www.linkedin.com/in/maher-ben-aicha` as a placeholder. Update it to your real
    profile URL (also used in `components/sections/Footer.tsx`, `Navbar.tsx`, and

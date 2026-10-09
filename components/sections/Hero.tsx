@@ -1,26 +1,32 @@
+import Image from "next/image";
 import { ArrowDownRight, Github, Linkedin, Mail } from "lucide-react";
 import { FadeIn } from "@/components/motion/FadeIn";
 import { TechIcon } from "@/components/ui/TechIcon";
-import { ABOUT_HIGHLIGHT, ABOUT_SUMMARY, HERO, IDENTITY, SOCIALS } from "@/lib/portfolio-data";
+import { ABOUT_HIGHLIGHT, ABOUT_SUMMARY, HERO, IDENTITY, PORTRAIT, SOCIALS } from "@/lib/portfolio-data";
 
 const ORBIT = ["Python", "PyTorch", "OpenCV", "YOLOv8", "Hugging Face", "React", "TensorFlow", "Docker"];
 
-/** Monogram at the center with the core stack orbiting around it. */
+/** Portrait at the center with the core stack orbiting around it. */
 function Orbit() {
   return (
-    <div className="relative mx-auto aspect-square w-full max-w-[460px]" aria-hidden="true">
+    <div className="relative mx-auto aspect-square w-full max-w-[460px]">
       <div className="absolute inset-[6%] rounded-full border border-line" />
-      <div className="absolute inset-[22%] rounded-full border border-dashed border-line-strong" />
+      <div className="absolute inset-[18%] rounded-full border border-dashed border-line-strong" />
       <div
-        className="absolute inset-[34%] rounded-full blur-2xl"
+        className="absolute inset-[22%] rounded-full blur-2xl"
         style={{ background: "radial-gradient(closest-side, var(--glow), transparent)" }}
       />
-      <div className="absolute inset-[36%] grid place-items-center rounded-full border border-line-strong bg-bg-2 shadow-[0_0_80px_var(--glow)]">
-        <span className="font-display text-4xl font-extrabold tracking-tight md:text-5xl">
-          M<span className="serif-accent">B</span>
-        </span>
+      <div className="absolute inset-[27%] overflow-hidden rounded-full border-2 border-accent bg-bg-2 shadow-[0_0_90px_var(--glow)]">
+        <Image
+          src={PORTRAIT.current}
+          alt={PORTRAIT.alt}
+          fill
+          priority
+          sizes="(min-width: 1024px) 220px, 45vw"
+          className="object-cover object-[50%_35%]"
+        />
       </div>
-      <div className="orbit-spin absolute inset-[6%]">
+      <div className="orbit-spin absolute inset-[6%]" aria-hidden="true">
         {ORBIT.map((name, i) => {
           const angle = (i / ORBIT.length) * 2 * Math.PI;
           const x = 50 + 50 * Math.cos(angle);
