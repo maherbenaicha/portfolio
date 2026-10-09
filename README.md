@@ -10,8 +10,8 @@ Built with **Next.js 14**, **Tailwind CSS**, and **Framer Motion**.
 | Language | TypeScript |
 | Styling | Tailwind CSS v3 |
 | Animations | Framer Motion |
-| Contact form | Resend API |
-| Fonts | Space Grotesk (display) · IBM Plex Mono · Caveat |
+| Contact form | Resend API (`app/api/contact/route.ts`) |
+| Fonts | Manrope · Fraunces (italic accents) · JetBrains Mono, self-hosted via Fontsource |
 
 ## Getting started
 

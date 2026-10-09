@@ -1,125 +1,75 @@
-import { FileText, ArrowUpRight } from "lucide-react";
-import { EDUCATION, CLUBS, LANGUAGES } from "@/lib/portfolio-data";
+import { Award, Users } from "lucide-react";
+import { FadeIn } from "@/components/motion/FadeIn";
+import { SectionHeader } from "@/components/ui/SectionHeader";
+import { CERTIFICATIONS, CLUBS, EDUCATION } from "@/lib/portfolio-data";
 
-const EDUCATION_BADGES: Record<string, string> = {
-  "Final year": "🏆 Final Year",
-  "High Honors — Rank: MP 387": "🏆 High Honors · Rank MP 387",
-};
-
-export const Education = () => {
+export function Education() {
   return (
-    <section id="education" className="relative overflow-hidden py-24 px-6 lg:px-20">
-      <div className="max-w-5xl mx-auto">
-        {/* Header */}
-        <div className="mb-14">
-          <span className="section-label">Background</span>
-          <h2 className="section-title">Education</h2>
-        </div>
+    <section id="education" className="section">
+      <div className="container-x">
+        <SectionHeader
+          index="05"
+          label="Education & beyond"
+          title="The foundations"
+          accent="I'm building on."
+          intro="Engineering school, the preparatory years before it, and what happens outside the classroom."
+        />
 
-        {/* Education cards */}
-        <div className="space-y-5 mb-16">
-          {EDUCATION.map((edu) => (
-            <div
-              key={edu.degree}
-              className="rounded-2xl p-6 sm:p-8 transition-all duration-300 hover:-translate-y-1"
-              style={{
-                background: "rgba(10, 13, 26, 0.6)",
-                border: "1px solid rgba(255,255,255,0.07)",
-                backdropFilter: "blur(12px)",
-              }}
-            >
-              <h3 className="text-lg font-bold text-white mb-1">{edu.degree}</h3>
-              <p className="text-sm font-semibold mb-2" style={{ color: "#06b6d4" }}>
-                {edu.school}
-              </p>
-              <p className="text-sm text-slate-400 mb-4">{edu.period}</p>
-              {edu.note && (
-                <span
-                  className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium text-slate-200"
-                  style={{
-                    background: "rgba(255,255,255,0.06)",
-                    border: "1px solid rgba(255,255,255,0.12)",
-                  }}
-                >
-                  {EDUCATION_BADGES[edu.note] ?? `🏆 ${edu.note}`}
-                </span>
-              )}
-            </div>
-          ))}
-        </div>
-
-        {/* Clubs & Community */}
-        <div id="clubs-community" className="scroll-mt-24 mb-16">
-          <h3
-            className="text-xs font-bold tracking-[0.2em] uppercase mb-8"
-            style={{ color: "#a855f7" }}
-          >
-            Clubs &amp; Community
-          </h3>
-          <div className="space-y-5">
-            {CLUBS.map((club) => (
-              <div
-                key={club.org}
-                className="rounded-2xl p-6 sm:p-8"
-                style={{
-                  background: "rgba(10, 13, 26, 0.6)",
-                  border: "1px solid rgba(255,255,255,0.07)",
-                  backdropFilter: "blur(12px)",
-                }}
-              >
-                <h4 className="text-base font-bold text-white mb-1">{club.role}</h4>
-                <p className="text-sm font-semibold mb-1" style={{ color: "#06b6d4" }}>
-                  {club.org}
-                </p>
-                <p className="text-xs text-slate-500 mb-3">{club.period}</p>
-                <p className="text-sm text-slate-400 leading-relaxed">{club.detail}</p>
-                {club.certificate && (
-                  <a
-                    href={club.certificate.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="mt-4 inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium text-slate-300 transition-colors hover:text-violet-400"
-                    style={{
-                      background: "rgba(255,255,255,0.05)",
-                      border: "1px solid rgba(255,255,255,0.1)",
-                    }}
-                  >
-                    <FileText size={14} />
-                    View Certificate
-                    <span className="text-xs text-slate-500">PDF</span>
-                    <ArrowUpRight size={13} />
-                  </a>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Languages */}
-        <div>
-          <h3
-            className="text-xs font-bold tracking-[0.2em] uppercase mb-6"
-            style={{ color: "#a855f7" }}
-          >
-            Languages
-          </h3>
-          <div className="flex flex-wrap gap-3">
-            {LANGUAGES.map((lang) => (
+        <ol className="relative ml-1 border-l border-line">
+          {EDUCATION.map((e, i) => (
+            <FadeIn as="li" key={e.degree} delay={i * 0.06} className="relative pb-12 pl-8 last:pb-0 md:pl-12">
               <span
-                key={lang.name}
-                className="rounded-full px-4 py-1.5 text-sm text-slate-200"
-                style={{
-                  background: "rgba(255,255,255,0.05)",
-                  border: "1px solid rgba(255,255,255,0.1)",
-                }}
-              >
-                {lang.name}{" "}
-                <span className="text-violet-400 font-mono text-xs">· {lang.level}</span>
-              </span>
-            ))}
-          </div>
+                className={`absolute -left-[5px] top-1.5 h-[9px] w-[9px] rounded-full ${
+                  i === 0 ? "bg-accent" : "border border-line-strong bg-bg"
+                }`}
+                aria-hidden="true"
+              />
+              <p className="font-mono text-xs uppercase tracking-[0.14em] text-accent">{e.period}</p>
+              <h3 className="mt-3 font-display text-xl font-bold tracking-tight md:text-2xl">{e.degree}</h3>
+              <p className="mt-1 text-muted">{e.school}</p>
+              {e.note && <p className="mt-3 inline-block text-sm text-warm">{e.note}</p>}
+            </FadeIn>
+          ))}
+        </ol>
+
+        <div className="mt-20 grid gap-5 md:grid-cols-2">
+          <FadeIn className="card h-full p-7 md:p-9">
+            <h3 className="flex items-center gap-3 font-display text-xl font-bold tracking-tight">
+              <Users size={18} className="text-accent" /> Community
+            </h3>
+            <ul className="mt-6 space-y-6">
+              {CLUBS.map((c) => (
+                <li key={c.org}>
+                  <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                    <p className="font-semibold">{c.org}</p>
+                    <p className="font-mono text-[11px] text-faint">{c.period}</p>
+                  </div>
+                  <p className="mt-0.5 text-sm text-accent">{c.role}</p>
+                  <p className="mt-2 text-sm leading-relaxed text-muted">{c.detail}</p>
+                </li>
+              ))}
+            </ul>
+          </FadeIn>
+
+          <FadeIn delay={0.08} className="card h-full p-7 md:p-9">
+            <h3 className="flex items-center gap-3 font-display text-xl font-bold tracking-tight">
+              <Award size={18} className="text-accent" /> Certifications
+            </h3>
+            <ul className="mt-6 space-y-6">
+              {CERTIFICATIONS.map((c) => (
+                <li key={c.name}>
+                  <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                    <p className="font-semibold">{c.name}</p>
+                    <p className="font-mono text-[11px] text-faint">{c.date}</p>
+                  </div>
+                  <p className="mt-0.5 text-sm text-accent">{c.org}</p>
+                  <p className="mt-2 text-sm leading-relaxed text-muted">{c.summary}</p>
+                </li>
+              ))}
+            </ul>
+          </FadeIn>
         </div>
       </div>
     </section>
   );
-};
+}

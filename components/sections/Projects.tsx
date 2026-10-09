@@ -1,90 +1,95 @@
-"use client";
-
+import { ArrowUpRight, Github, Plus } from "lucide-react";
+import { FadeIn } from "@/components/motion/FadeIn";
+import { SectionHeader } from "@/components/ui/SectionHeader";
 import { ALL_PROJECTS, type Project } from "@/lib/portfolio-data";
 
-function ProjectCard({ project }: { project: Project }) {
+function ProjectCard({ project, index, featured }: { project: Project; index: number; featured: boolean }) {
   return (
     <article
-      className="group relative rounded-2xl p-6 sm:p-8 transition-all duration-300 hover:-translate-y-1"
-      style={{
-        background: "rgba(10, 13, 26, 0.6)",
-        border: "1px solid rgba(255,255,255,0.07)",
-        backdropFilter: "blur(12px)",
-      }}
+      className={`card group flex h-full flex-col p-7 md:p-9 hover:-translate-y-0.5 ${
+        featured ? "md:col-span-2 lg:col-span-1" : ""
+      }`}
     >
-      {/* Hover glow */}
-      <div
-        className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-        style={{
-          boxShadow: "0 0 40px rgba(124,58,237,0.12) inset",
-          border: "1px solid rgba(124,58,237,0.2)",
-        }}
-      />
-
-      {/* Emoji icon */}
-      <div className="text-4xl mb-5">{project.emoji}</div>
-
-      {/* Title */}
-      <h3 className="text-lg font-bold text-white mb-2 leading-snug">
-        {project.name}
-      </h3>
-
-      {/* Description */}
-      <p className="text-sm leading-relaxed text-slate-400 mb-5">
-        {project.fullDesc}
-      </p>
-
-      {/* Tech tags */}
-      <div className="flex flex-wrap gap-2">
-        {project.tags.map((tag) => (
-          <span
-            key={tag}
-            className="rounded-full px-3 py-1 text-[11px] font-medium text-slate-300"
-            style={{
-              background: "rgba(255,255,255,0.05)",
-              border: "1px solid rgba(255,255,255,0.1)",
-            }}
-          >
-            {tag}
-          </span>
-        ))}
+      <div className="flex items-start justify-between gap-6">
+        <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-accent">
+          {project.context ?? `${project.category} · ${project.year}`}
+        </p>
+        <span className="font-mono text-[11px] text-faint">{String(index + 1).padStart(2, "0")}</span>
       </div>
 
-      {/* GitHub link */}
-      {project.github && (
+      <h3 className="mt-5 font-display text-2xl font-bold leading-tight tracking-tight md:text-[1.7rem]">
+        {project.name}
+      </h3>
+      <p className="mt-3 leading-relaxed text-muted">{project.shortDesc}</p>
+
+      {project.metrics && project.metrics.length > 0 && (
+        <ul className="mt-6 grid gap-px overflow-hidden rounded-xl border border-line bg-line sm:grid-cols-2">
+          {project.metrics.map((m) => (
+            <li key={m} className="bg-bg-2 px-4 py-3 text-sm font-semibold text-text">
+              {m}
+            </li>
+          ))}
+        </ul>
+      )}
+
+      <ul className="mt-6 flex flex-wrap gap-2">
+        {project.tags.slice(0, 6).map((t) => (
+          <li key={t} className="chip">
+            {t}
+          </li>
+        ))}
+        {project.tags.length > 6 && <li className="chip">+{project.tags.length - 6}</li>}
+      </ul>
+
+      <details className="group/d mt-6 border-t border-line pt-5">
+        <summary className="flex cursor-pointer list-none items-center gap-2 font-mono text-[11px] uppercase tracking-[0.16em] text-muted transition-colors hover:text-text [&::-webkit-details-marker]:hidden">
+          <Plus size={14} className="transition-transform group-open/d:rotate-45" />
+          Details
+        </summary>
+        <p className="mt-4 text-sm leading-relaxed text-muted">{project.fullDesc}</p>
+      </details>
+
+      <div className="mt-auto flex items-center gap-4 pt-6">
         <a
           href={project.github}
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-5 inline-flex items-center gap-2 text-xs font-mono text-slate-500 hover:text-violet-400 transition-colors"
+          className="inline-flex items-center gap-2 text-sm text-text transition-colors hover:text-accent"
         >
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
-            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z" />
-          </svg>
-          View on GitHub →
+          <Github size={16} /> GitHub
         </a>
-      )}
+        {project.live && (
+          <a
+            href={project.live}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 text-sm text-text transition-colors hover:text-accent"
+          >
+            Live <ArrowUpRight size={15} />
+          </a>
+        )}
+      </div>
     </article>
   );
 }
 
 export function Projects() {
   return (
-    <section id="projects" className="relative overflow-hidden px-6 py-24 lg:px-20">
-      <div className="max-w-5xl mx-auto">
-        {/* Header */}
-        <div className="mb-14">
-          <span className="section-label">Projects</span>
-          <h2 className="section-title">Engineering Projects</h2>
-          <p className="section-sub">
-            End-to-end systems across AI, geospatial, and full-stack domains.
-          </p>
-        </div>
+    <section id="projects" className="section">
+      <div className="container-x">
+        <SectionHeader
+          index="03"
+          label="Projects"
+          title="Models, meet"
+          accent="real-world use."
+          intro="From satellite imagery to sign language: research-driven builds, shipped end to end."
+        />
 
-        {/* Vertical list */}
-        <div className="space-y-6">
-          {ALL_PROJECTS.map((project) => (
-            <ProjectCard key={project.slug} project={project} />
+        <div className="grid gap-5 md:grid-cols-2">
+          {ALL_PROJECTS.map((p, i) => (
+            <FadeIn key={p.slug} delay={(i % 2) * 0.08} className={i === 0 ? "md:col-span-2" : ""}>
+              <ProjectCard project={p} index={i} featured={i === 0} />
+            </FadeIn>
           ))}
         </div>
       </div>

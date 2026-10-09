@@ -1,268 +1,155 @@
-"use client";
-
-import { useRef, useState } from "react";
-import Image from "next/image";
-import Link from "next/link";
-import {
-  motion,
-  useScroll,
-  useTransform,
-  useReducedMotion,
-} from "framer-motion";
-import { ArrowUpRight, FileDown } from "lucide-react";
-import { Magnet } from "@/components/motion/Magnet";
+import { ArrowDownRight, Github, Linkedin, Mail } from "lucide-react";
 import { FadeIn } from "@/components/motion/FadeIn";
-import { HeroGlobe } from "@/components/sections/HeroGlobe";
-import { EngineerGlobe } from "@/components/sections/EngineerGlobe";
-import { IDENTITY, PORTRAIT, HERO_STATS } from "@/lib/portfolio-data";
+import { HERO, IDENTITY, SOCIALS } from "@/lib/portfolio-data";
 
-const ORBIT_WORDS = ["LEARN", "BUILD", "BREAK", "IMPROVE", "REPEAT"];
+/** Original "detector view" illustration: a camera frame with live bounding
+ *  boxes — a nod to the computer-vision work in the projects below. */
+function VisionPanel() {
+  const boxes = [
+    { x: 46, y: 70, w: 120, h: 132, label: "hand · 0.94" },
+    { x: 214, y: 150, w: 150, h: 92, label: "oil_slick · 0.88" },
+    { x: 110, y: 262, w: 108, h: 74, label: "keypoints · 21" },
+  ];
+  return (
+    <div className="card relative overflow-hidden p-0" aria-hidden="true">
+      <div className="flex items-center justify-between border-b border-line px-4 py-3 font-mono text-[11px] text-faint">
+        <span className="flex items-center gap-2">
+          <span className="pulse-dot h-1.5 w-1.5 rounded-full bg-accent" />
+          live · inference
+        </span>
+        <span>640 × 480</span>
+      </div>
+      <svg viewBox="0 0 410 380" className="block w-full" style={{ ["--scan-distance" as string]: "330px" }}>
+        <defs>
+          <pattern id="hero-grid" width="20" height="20" patternUnits="userSpaceOnUse">
+            <path d="M20 0H0V20" fill="none" stroke="var(--line)" strokeWidth="1" />
+          </pattern>
+          <linearGradient id="hero-scan" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0" stopColor="var(--accent)" stopOpacity="0" />
+            <stop offset="1" stopColor="var(--accent)" stopOpacity="0.35" />
+          </linearGradient>
+        </defs>
+        <rect width="410" height="380" fill="var(--bg-2)" />
+        <rect width="410" height="380" fill="url(#hero-grid)" />
+
+        {/* abstract scene contours */}
+        <path d="M0 300 C 80 270, 140 320, 220 290 S 340 250, 410 280" fill="none" stroke="var(--line-strong)" strokeWidth="1.2" />
+        <path d="M0 330 C 90 310, 160 350, 250 325 S 360 300, 410 315" fill="none" stroke="var(--line)" strokeWidth="1.2" />
+        <circle cx="330" cy="80" r="34" fill="none" stroke="var(--line-strong)" strokeWidth="1.2" />
+
+        {/* keypoint skeleton */}
+        <g stroke="var(--warm)" strokeWidth="1.4" fill="var(--warm)">
+          <polyline points="94,182 104,150 112,118 118,92" fill="none" />
+          <polyline points="104,150 128,128 140,104" fill="none" />
+          <polyline points="104,150 82,126 72,104" fill="none" />
+          {[[94, 182], [104, 150], [112, 118], [118, 92], [128, 128], [140, 104], [82, 126], [72, 104]].map(([cx, cy]) => (
+            <circle key={`${cx}-${cy}`} cx={cx} cy={cy} r="2.6" stroke="none" />
+          ))}
+        </g>
+
+        {boxes.map((b) => (
+          <g key={b.label} className="det-box">
+            <rect x={b.x} y={b.y} width={b.w} height={b.h} fill="var(--accent-soft)" stroke="var(--accent)" strokeWidth="1.4" rx="3" />
+            <rect x={b.x} y={b.y - 18} width={b.label.length * 6.6 + 12} height="18" fill="var(--accent)" rx="2" />
+            <text x={b.x + 6} y={b.y - 5} fontFamily="var(--font-mono)" fontSize="10.5" fill="var(--accent-ink)">
+              {b.label}
+            </text>
+          </g>
+        ))}
+
+        <g className="scanline">
+          <rect x="0" y="-24" width="410" height="24" fill="url(#hero-scan)" />
+          <line x1="0" x2="410" y1="0" y2="0" stroke="var(--accent)" strokeWidth="1" />
+        </g>
+
+        {/* corner brackets */}
+        <g stroke="var(--text)" strokeWidth="2" fill="none" opacity="0.5">
+          <path d="M14 34V14H34" />
+          <path d="M376 14H396V34" />
+          <path d="M396 346V366H376" />
+          <path d="M34 366H14V346" />
+        </g>
+      </svg>
+      <div className="grid grid-cols-3 border-t border-line font-mono text-[11px] text-faint">
+        <span className="px-4 py-3">yolov8</span>
+        <span className="border-x border-line px-4 py-3">3 objects</span>
+        <span className="px-4 py-3 text-right">~30 fps</span>
+      </div>
+    </div>
+  );
+}
 
 export function Hero() {
-  const ref = useRef<HTMLElement>(null);
-  const reduce = useReducedMotion();
-  const [tilt, setTilt] = useState({ x: 0, y: 0 });
-
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start start", "end start"],
-  });
-  const portraitY = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : 120]);
-  const headingY = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : -60]);
-  const fade = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
-
-  function handlePointer(e: React.PointerEvent) {
-    if (reduce || e.pointerType === "touch") return;
-    const r = e.currentTarget.getBoundingClientRect();
-    const px = (e.clientX - r.left) / r.width - 0.5;
-    const py = (e.clientY - r.top) / r.height - 0.5;
-    setTilt({ x: +(py * -3).toFixed(2), y: +(px * 4).toFixed(2) });
-  }
-
   return (
-    <section
-      id="home"
-      ref={ref}
-      onPointerMove={handlePointer}
-      onPointerLeave={() => setTilt({ x: 0, y: 0 })}
-      className="relative flex min-h-[100svh] w-full flex-col justify-center overflow-hidden px-5 pb-8 pt-28 sm:px-8 lg:px-12"
-    >
-      {/* LAYER 1 — atmosphere */}
-      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute inset-0 grid-lines opacity-60" />
-        <div className="absolute inset-0 grain opacity-40" />
-        <div className="absolute left-1/2 top-[42%] h-[60vh] w-[60vh] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(105,183,255,0.14),transparent_65%)]" />
-        <div className="absolute bottom-0 left-1/2 h-[30vh] w-[80vw] -translate-x-1/2 bg-[radial-gradient(ellipse_at_bottom,rgba(105,183,255,0.10),transparent_70%)]" />
-      </div>
-
-      {/* top-right decorative — dotted globe with a Tunis marker */}
-      <FadeIn
-        onView={false}
-        x={20}
-        delay={0.2}
-        className="pointer-events-none absolute right-0 top-16 hidden lg:block"
-      >
-        <HeroGlobe />
-      </FadeIn>
-
-      {/* right-side: cursive tag + orbit words */}
-      <div className="pointer-events-none absolute right-5 top-1/2 hidden -translate-y-1/2 flex-col items-end gap-3 lg:flex">
-        <FadeIn onView={false} delay={0.35} x={20} className="font-caveat text-3xl text-paper/85">
-          {IDENTITY.cursiveTag}
-        </FadeIn>
-        <div className="h-14 w-px bg-gradient-to-b from-transparent to-paper/20" />
-        {ORBIT_WORDS.map((w, i) => (
-          <FadeIn
-            key={w}
-            onView={false}
-            x={20}
-            delay={0.5 + i * 0.08}
-            className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.3em] text-paper/30"
-          >
-            {w}
-            <span className="h-1 w-1 rounded-full bg-accent/60" />
-          </FadeIn>
-        ))}
-        <div className="h-14 w-px bg-gradient-to-b from-paper/20 to-transparent" />
-
-        {/* quote card */}
-        <FadeIn onView={false} delay={0.9} x={20} className="mt-6 max-w-[220px]">
-          <div className="flex items-start gap-2 rounded-xl border border-paper/15 bg-paper/[0.03] px-4 py-3">
-            <span className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
-            <p className="font-serif text-[13px] italic leading-snug text-paper/60">
-              &ldquo;Code is the tool.
-              <br />
-              Intelligence is the goal.&rdquo;
-            </p>
-          </div>
-        </FadeIn>
-      </div>
-
-      {/* CENTRE STAGE — "Hi, I'm [portrait] Maher" on one line at lg+, stacked below */}
-      <h1 className="sr-only">Hi, I&apos;m Maher — Software Engineering Student at ENIT</h1>
+    <section id="top" className="relative overflow-hidden pt-[120px] md:pt-[150px]">
+      <div className="bg-grid pointer-events-none absolute inset-0" aria-hidden="true" />
       <div
-        aria-hidden
-        className="relative mx-auto flex w-full max-w-[1300px] flex-1 flex-col items-center justify-center lg:flex-row lg:gap-1 xl:gap-3"
-      >
-        {/* LAYER 2a — "Hi, I'm" */}
-        <FadeIn onView={false} delay={0.15} y={40} className="z-0 order-1 shrink-0">
-          <motion.div
-            style={{ y: headingY }}
-            className="pointer-events-none relative select-none text-center font-black leading-[0.82] tracking-tight lg:text-right"
-          >
-            <span
-              aria-hidden
-              className="heading-glint left-[18%] top-[6%] animate-sparkle hidden sm:block"
-            />
-            <span
-              data-text="Hi, I'm"
-              className="hero-heading block text-[clamp(2.8rem,10vw,7rem)]"
-            >
-              Hi, I&apos;m
-            </span>
-          </motion.div>
-        </FadeIn>
+        className="pointer-events-none absolute -top-40 left-1/2 h-[520px] w-[820px] -translate-x-1/2 rounded-full blur-3xl"
+        style={{ background: "radial-gradient(closest-side, var(--glow), transparent)" }}
+        aria-hidden="true"
+      />
 
-        {/* LAYER 3 — portrait, between the two halves of the heading */}
-        <motion.div
-          style={{ y: portraitY, opacity: fade }}
-          className="relative z-20 order-2 mx-auto -my-2 w-fit shrink-0 lg:my-0"
-        >
-          {/* thin orbit arcs flanking the portrait */}
-          <svg
-            aria-hidden
-            viewBox="0 0 620 280"
-            className="pointer-events-none absolute left-1/2 top-1/2 hidden h-[280px] w-[620px] -translate-x-1/2 -translate-y-1/2 overflow-visible sm:block"
-          >
-            <ellipse cx="310" cy="140" rx="305" ry="105" fill="none" stroke="rgba(215,226,234,0.14)" strokeWidth="0.75" />
-            <circle cx="18" cy="100" r="3" fill="#69b7ff" opacity="0.8" />
-            <circle cx="600" cy="180" r="2.5" fill="#d7e2ea" opacity="0.6" />
-          </svg>
+      <div className="container-x relative grid items-center gap-14 pb-24 md:pb-32 lg:grid-cols-[1.15fr_0.85fr]">
+        <div>
+          <FadeIn onView={false}>
+            <p className="eyebrow flex flex-wrap items-center gap-3">
+              <span className="text-text">{IDENTITY.name}</span>
+              <span className="h-px w-10 bg-line-strong" />
+              <span>{HERO.eyebrow}</span>
+            </p>
+          </FadeIn>
 
-          <Magnet padding={130} strength={3.4}>
-            <motion.div
-              animate={{ rotateX: tilt.x, rotateY: tilt.y }}
-              transition={{ type: "spring", stiffness: 120, damping: 18 }}
-              style={{ transformPerspective: 900 }}
-              className="relative w-[clamp(250px,32vw,440px)]"
-            >
-              {/* backlight glow, shows through the cutout's soft edges */}
-              <div
-                aria-hidden
-                className="absolute inset-x-[-15%] inset-y-[-10%] -z-10 rounded-[45%] bg-[radial-gradient(ellipse,rgba(105,183,255,0.24),transparent_68%)] blur-2xl"
-              />
-              {/* true alpha cutout — no crop box, shape-aware shadow + rim glow via drop-shadow */}
-              <Image
-                src={PORTRAIT.current}
-                alt={PORTRAIT.alt}
-                width={872}
-                height={749}
-                priority
-                sizes="(max-width:640px) 65vw, 440px"
-                className="relative h-auto w-full select-none drop-shadow-[0_35px_50px_rgba(0,0,0,0.65)] [filter:drop-shadow(0_35px_50px_rgba(0,0,0,0.65))_drop-shadow(-10px_0_28px_rgba(105,183,255,0.28))_drop-shadow(10px_0_28px_rgba(140,207,255,0.16))]"
-              />
+          <FadeIn onView={false} delay={0.08}>
+            <h1 className="mt-7 font-display text-[clamp(2.7rem,7.2vw,5.4rem)] font-extrabold leading-[0.98] tracking-[-0.045em]">
+              {HERO.line1}
+              <br />
+              <span className="serif-accent text-[1.06em]">{HERO.accent}</span>
+              <br />
+              <span className="text-muted">{HERO.line3}</span>
+            </h1>
+          </FadeIn>
 
-              {/* metallic ring platform — absolutely positioned so its
-                  wider-than-portrait size never affects the layout above */}
-              <div className="absolute left-1/2 top-full h-20 w-[155%] -translate-x-1/2 -translate-y-3 sm:h-24 sm:-translate-y-4">
-                <svg viewBox="0 0 600 110" className="h-full w-full overflow-visible" aria-hidden>
-                  <defs>
-                    <linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="0">
-                      <stop offset="0%" stopColor="rgba(215,226,234,0.04)" />
-                      <stop offset="50%" stopColor="rgba(105,183,255,0.75)" />
-                      <stop offset="100%" stopColor="rgba(215,226,234,0.04)" />
-                    </linearGradient>
-                    <radialGradient id="ringGlow" cx="50%" cy="20%" r="70%">
-                      <stop offset="0%" stopColor="rgba(105,183,255,0.18)" />
-                      <stop offset="100%" stopColor="rgba(105,183,255,0)" />
-                    </radialGradient>
-                  </defs>
-                  <ellipse cx="300" cy="22" rx="258" ry="34" fill="url(#ringGlow)" />
-                  <ellipse cx="300" cy="20" rx="258" ry="34" fill="none" stroke="url(#ringGrad)" strokeWidth="2" />
-                  <ellipse cx="300" cy="16" rx="258" ry="34" fill="none" stroke="rgba(215,226,234,0.15)" strokeWidth="0.75" />
-                </svg>
+          <FadeIn onView={false} delay={0.16}>
+            <p className="mt-8 max-w-xl text-lg leading-relaxed text-muted">
+              Software engineering student at <span className="text-text">ENIT</span>, building computer vision
+              pipelines, LLM-powered tools and the full-stack apps that put them in people&apos;s hands.
+            </p>
+          </FadeIn>
+
+          <FadeIn onView={false} delay={0.24}>
+            <div className="mt-10 flex flex-wrap items-center gap-3">
+              <a href="#projects" className="btn btn-primary">
+                View my projects <ArrowDownRight size={16} />
+              </a>
+              <a href={SOCIALS.resume} target="_blank" rel="noopener noreferrer" className="btn btn-ghost">
+                Download CV
+              </a>
+              <div className="flex items-center gap-2 sm:ml-2">
+                <a href={SOCIALS.linkedin} target="_blank" rel="noopener noreferrer" className="icon-btn" aria-label="LinkedIn">
+                  <Linkedin size={17} />
+                </a>
+                <a href={SOCIALS.github} target="_blank" rel="noopener noreferrer" className="icon-btn" aria-label="GitHub">
+                  <Github size={17} />
+                </a>
+                <a href={`mailto:${SOCIALS.email}`} className="icon-btn" aria-label="Email">
+                  <Mail size={17} />
+                </a>
               </div>
-            </motion.div>
-          </Magnet>
-          {/* spacer so the absolutely-positioned ring still reserves flow height below the portrait */}
-          <div className="h-14 sm:h-16" aria-hidden />
-        </motion.div>
-
-        {/* LAYER 2b — "Maher" */}
-        <FadeIn onView={false} delay={0.25} y={40} className="z-0 order-3 shrink-0">
-          <motion.div
-            style={{ y: headingY }}
-            className="pointer-events-none relative select-none text-center font-black leading-[0.82] tracking-tight lg:text-left"
-          >
-            <span
-              aria-hidden
-              className="heading-glint right-[20%] top-[30%] hidden animate-sparkle sm:block"
-              style={{ animationDelay: "1.1s" }}
-            />
-            <span
-              data-text="Maher"
-              className="hero-heading block text-[clamp(3.2rem,12.5vw,8rem)]"
-            >
-              Maher
-            </span>
-          </motion.div>
-        </FadeIn>
-      </div>
-
-      {/* LAYER 4 — info + CTAs */}
-      <div className="relative z-20 mx-auto grid w-full max-w-6xl gap-8 pt-4 sm:grid-cols-2 sm:items-end">
-        <FadeIn onView={false} delay={0.5} className="space-y-3">
-          <p className="text-lg font-medium text-paper sm:text-xl">
-            Software Engineering Student
-            <br className="hidden sm:block" /> at ENIT
-          </p>
-          <p className="font-mono text-xs uppercase tracking-[0.25em] text-accent-soft">
-            {IDENTITY.focusLine}
-          </p>
-          <p className="max-w-sm text-sm leading-relaxed text-paper/55">
-            {IDENTITY.heroDescription}
-          </p>
-        </FadeIn>
-
-        <FadeIn onView={false} delay={0.6} className="flex flex-wrap gap-3 sm:justify-end">
-          <Link href="/#projects" className="btn-primary">
-            View My Work
-            <ArrowUpRight size={15} className="btn-arrow" />
-          </Link>
-          <Link href="/#about" className="btn-ghost">
-            About Me
-          </Link>
-          <a href="/Resume.pdf" download className="btn-ghost">
-            <FileDown size={15} />
-            Resume
-          </a>
-        </FadeIn>
-      </div>
-
-      {/* LAYER 5 — compact stats row */}
-      <FadeIn
-        onView={false}
-        delay={0.75}
-        className="relative z-20 mx-auto mt-8 flex w-full max-w-6xl flex-wrap items-center gap-x-6 gap-y-3 divide-x divide-paper/10"
-      >
-        {HERO_STATS.map((s, i) => (
-          <div key={s.label} className={i === 0 ? "" : "pl-6"}>
-            <div className="text-xl font-bold text-paper">{s.value}</div>
-            <div className="mt-0.5 font-mono text-[9px] uppercase tracking-[0.2em] text-paper/40">
-              {s.label}
             </div>
-          </div>
-        ))}
-      </FadeIn>
+          </FadeIn>
 
-      {/* corner labels */}
-      <div className="pointer-events-none relative z-20 mx-auto mt-8 hidden w-full max-w-6xl items-center justify-between font-mono text-[10px] uppercase tracking-[0.25em] text-paper/30 lg:flex">
-        <span>{IDENTITY.phrases.tunisiaToWorld}</span>
-        <span>{IDENTITY.phrases.alwaysBuilding}</span>
+          <FadeIn onView={false} delay={0.32}>
+            <p className="mt-10 flex items-center gap-3 text-sm text-muted">
+              <span className="pulse-dot h-2 w-2 shrink-0 rounded-full bg-accent" />
+              {HERO.availability}
+            </p>
+          </FadeIn>
+        </div>
+
+        <FadeIn onView={false} delay={0.2} y={36}>
+          <VisionPanel />
+        </FadeIn>
       </div>
-
-      {/* floating Engineer/AI/Cyber balloons, confined to this section */}
-      <EngineerGlobe containerRef={ref} />
     </section>
   );
 }

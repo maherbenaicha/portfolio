@@ -161,11 +161,17 @@ export type Project = {
   /** abstract visual identity for the generated card artwork */
   visual: "pipeline" | "agents" | "recon" | "vision" | "cloud" | "app" | "search" | "game";
   emoji: string;
+  /** "Where · when" line shown above the title */
+  context?: string;
+  /** Two short, factual highlights shown as key figures */
+  metrics?: string[];
 };
 
 export const FEATURED_PROJECTS: Project[] = [
   {
     slug: "oilscan",
+    context: "ENIT · 2025–2026",
+    metrics: ["1,000 annotated SAR images", "YOLOv8 + FastAPI web GIS"],
     name: "OilScan — Oil Spill Detection from SAR Satellite Imagery",
     category: "Computer Vision × Geospatial",
     year: "2025–2026",
@@ -180,6 +186,8 @@ export const FEATURED_PROJECTS: Project[] = [
   },
   {
     slug: "tunisian-sign-language",
+    context: "ENIT · 2025–2026",
+    metrics: ["Bidirectional sign ↔ text", "CNN + LSTM on MediaPipe keypoints"],
     name: "Tunisian Sign Language to Text Translation",
     category: "Computer Vision × Mobile",
     year: "2025–2026",
@@ -194,6 +202,8 @@ export const FEATURED_PROJECTS: Project[] = [
   },
   {
     slug: "llm-chatbot",
+    context: "ENIT · 2024–2025",
+    metrics: ["Fine-tuned DistilGPT-2", "Dockerized, cloud-deployed"],
     name: "Intelligent LLM-Based Chatbot",
     category: "AI × Full Stack",
     year: "2024–2025",
@@ -211,6 +221,8 @@ export const FEATURED_PROJECTS: Project[] = [
 export const MORE_PROJECTS: Project[] = [
   {
     slug: "stagedelice",
+    context: "Délice Danone · Internship 2025–2026",
+    metrics: ["AI question generation with Llama 3.3 70B", "CV scoring & candidate ranking"],
     name: "StageDélice — Recruitment Platform",
     category: "Full Stack × AI",
     year: "2025–2026",
@@ -225,6 +237,8 @@ export const MORE_PROJECTS: Project[] = [
   },
   {
     slug: "safran-notification-service",
+    context: "Safran Electrical & Power · June–July 2025",
+    metrics: ["Scheduled Spring Boot microservice", "Angular template manager"],
     name: "Automated Email Notification Microservice",
     category: "Backend × Enterprise",
     year: "2025",
@@ -362,4 +376,49 @@ export const HERO_STATS = [
   { value: "5+", label: "Projects" },
   { value: "2", label: "Internships" },
   { value: "ENIT", label: "Top School" },
+];
+
+/* ── Editorial hero + grouped skills (2026 redesign) ── */
+
+export const HERO = {
+  eyebrow: "AI · Computer Vision · Full-Stack",
+  line1: "Teaching machines",
+  accent: "to see,",
+  line3: "then shipping it.",
+  availability: "Open to a 4–6 month AI / software engineering internship (PFE)",
+} as const;
+
+export type SkillCategory = { title: string; blurb: string; items: string[] };
+
+export const SKILL_CATEGORIES: SkillCategory[] = [
+  {
+    title: "Computer Vision",
+    blurb: "Detection, tracking and recognition on images and video.",
+    items: ["YOLOv8", "OpenCV", "MediaPipe", "CNN", "Roboflow"],
+  },
+  {
+    title: "ML, DL & LLMs",
+    blurb: "Training sequence models and putting language models to work.",
+    items: ["Deep Learning", "LSTM", "Hugging Face", "DistilGPT-2", "Llama 3.3", "Groq API", "Prompt Engineering"],
+  },
+  {
+    title: "Python & Data",
+    blurb: "Where every experiment starts.",
+    items: ["Python", "NumPy", "Jupyter", "SQL", "Sentinel-1", "GeoTIFF"],
+  },
+  {
+    title: "Web & APIs",
+    blurb: "Interfaces and services that put models in people's hands.",
+    items: ["React", "Next.js", "Node.js", "Express", "FastAPI", "Angular", "Spring Boot", "Leaflet.js"],
+  },
+  {
+    title: "Databases",
+    blurb: "Relational and document storage.",
+    items: ["SQL Server", "MySQL", "MongoDB"],
+  },
+  {
+    title: "Dev Tools",
+    blurb: "Everyday tooling for code, containers and APIs.",
+    items: ["Git", "GitHub", "Docker", "Linux", "Postman", "n8n"],
+  },
 ];

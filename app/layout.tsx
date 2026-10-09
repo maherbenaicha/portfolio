@@ -1,35 +1,13 @@
 import type { Metadata } from "next";
-import { Syne, DM_Sans, IBM_Plex_Mono } from "next/font/google";
+import "@fontsource-variable/manrope";
+import "@fontsource/fraunces/latin-400-italic.css";
+import "@fontsource-variable/jetbrains-mono";
 
 import { Navbar } from "@/components/sections/Navbar";
 import { Footer } from "@/components/sections/Footer";
 import { PersonJsonLd, WebsiteJsonLd } from "@/components/ui/JsonLd";
-import { ParticleCanvas } from "@/components/fx/ParticleCanvas";
-import { SiteLoader } from "@/components/fx/SiteLoader";
-import { CustomCursor } from "@/components/fx/CustomCursor";
 import "./globals.css";
 
-const syne = Syne({
-  subsets: ["latin"],
-  variable: "--font-syne",
-  display: "swap",
-  weight: ["400", "500", "600", "700", "800"],
-});
-
-const dm = DM_Sans({
-  subsets: ["latin"],
-  variable: "--font-dm",
-  display: "swap",
-  weight: ["300", "400", "500", "600"],
-  style: ["normal", "italic"],
-});
-
-const plex = IBM_Plex_Mono({
-  subsets: ["latin"],
-  variable: "--font-plex",
-  display: "swap",
-  weight: ["400", "500", "600"],
-});
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://maher-ben-aicha.vercel.app";
 
@@ -40,7 +18,7 @@ export const metadata: Metadata = {
     template: "%s | Maher Ben Aicha",
   },
   description:
-    "Maher Ben Aicha, final-year software engineering student at ENIT. Projects in artificial intelligence, computer vision, machine learning, and full-stack development.",
+    "Maher Ben Aicha, software engineering student at ENIT. Projects in artificial intelligence, computer vision, machine learning, and full-stack development.",
   keywords: [
     "Maher Ben Aicha", "ENIT", "Software Engineering Tunisia",
     "Artificial Intelligence", "Computer Vision", "Machine Learning",
@@ -81,19 +59,20 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className="dark" suppressHydrationWarning>
-      <body className={`${syne.variable} ${dm.variable} ${plex.variable} font-sans bg-ink text-paper antialiased`}>
+    <html lang="en" suppressHydrationWarning>
+      <head>
         <script
           dangerouslySetInnerHTML={{
-            __html: `document.documentElement.classList.add('js')`,
+            __html: `(function(){try{var d=document.documentElement;d.classList.add('js');var t=localStorage.getItem('theme');if(t==='light'||t==='dark'){d.setAttribute('data-theme',t)}else if(window.matchMedia('(prefers-color-scheme: light)').matches){d.setAttribute('data-theme','light')}}catch(e){}})();`,
           }}
         />
+      </head>
+      <body
+        className="font-sans antialiased"
+      >
         <PersonJsonLd />
         <WebsiteJsonLd />
-        <CustomCursor />
-        <SiteLoader />
-        <ParticleCanvas />
-        <div className="site-wrap relative z-[2] min-h-screen flex flex-col">
+        <div className="relative min-h-screen flex flex-col">
           <Navbar />
           <main className="flex-1">{children}</main>
           <Footer />
